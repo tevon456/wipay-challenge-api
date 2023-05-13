@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Customer;
+use App\Models\Book;
 
 class Sale extends Model
 {
@@ -28,6 +30,6 @@ class Sale extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Customer::class);
     }
 }
