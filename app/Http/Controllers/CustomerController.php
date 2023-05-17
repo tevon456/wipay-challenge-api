@@ -29,7 +29,7 @@ class CustomerController extends Controller
 
         if ($user?->role != 'admin' || $user?->id != $id) {
             return response()->json(['errors' => [
-                'message' => 'action unauthorized'
+                'message' => 'action unauthorized.'
             ]], 403);
         }
 
@@ -37,7 +37,7 @@ class CustomerController extends Controller
 
         if (!$customer) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
         }
 
@@ -67,7 +67,7 @@ class CustomerController extends Controller
 
         if ($user?->role != 'admin' || $user?->id != $id) {
             return response()->json(['errors' => [
-                'message' => 'action unauthorized'
+                'message' => 'action unauthorized.'
             ]], 403);
         }
 
@@ -75,7 +75,7 @@ class CustomerController extends Controller
 
         if (!$customer) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
         }
 
@@ -105,7 +105,7 @@ class CustomerController extends Controller
 
         if (!$customer) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
         }
 
