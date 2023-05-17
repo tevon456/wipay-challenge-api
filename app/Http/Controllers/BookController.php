@@ -27,7 +27,7 @@ class BookController extends Controller
     {
         $user = auth()->user();
         $perPage = $request->query('per_page', 10);
-        $search = $request->query('search');
+        $search = $request->query('query');
 
         $resultsWithSales = Book::where('title', 'LIKE', '%' . $search . '%')
             ->orWhere('author_name', 'LIKE', '%' . $search . '%')
