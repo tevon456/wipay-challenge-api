@@ -21,6 +21,28 @@ class BookController extends Controller
     }
 
     /**
+     * Display a search result of resources.
+     */
+    public function search(Request $request)
+    {
+        $user = auth()->user();
+        $perPage = $request->query('per_page', 10);
+        $search = $request->query('search');
+
+        $resultsWithSales = Book::where('title', 'LIKE', '%' . $search . '%')
+            ->orWhere('author_name', 'LIKE', '%' . $search . '%')
+            ->with('sales')->withCount('sales')->paginate($perPage);
+
+        $resultsWithoutSales = Book::where('title', 'LIKE', '%' . $search . '%')
+            ->orWhere('author_name', 'LIKE', '%' . $search . '%')
+            ->paginate($perPage);
+
+        $books = $user?->role == 'admin' ? $resultsWithSales : $resultsWithoutSales;
+
+        return response()->json($books);
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -53,7 +75,7 @@ class BookController extends Controller
 
         if (!$book) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
         }
 
@@ -82,7 +104,7 @@ class BookController extends Controller
 
         if (!$book) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
         }
 
@@ -100,14 +122,14 @@ class BookController extends Controller
 
         if (!$book) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
         }
 
         $book->delete();
 
         return response()->json([
-            'message' => 'book deleted successfully',
+            'message' => 'book deleted successfully.',
         ]);
     }
 }
