@@ -86,10 +86,9 @@ class BookController extends Controller
             ]], 404);
         }
 
-        // Update the book attributes with the validated data
         $book->update($request->all());
 
-        return response()->json($book, 200);
+        return response()->json($book);
     }
 
     /**
