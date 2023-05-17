@@ -22,6 +22,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'book'], function () {
     Route::get('/', [BookController::class, 'index']);
+    Route::get('/search', [BookController::class, 'search']);
     Route::post('/', [BookController::class, 'store']);
     Route::get('/{id}', [BookController::class, 'show']);
     Route::put('/{id}', [BookController::class, 'update']);
