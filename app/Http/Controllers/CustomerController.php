@@ -15,7 +15,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('per_page', 10);
-        $customers = Customer::with(['sales' => 'purchases'], 'user')->withCount(['sales' => 'purchases_count'])->paginate($perPage);
+        $customers = Customer::with('sales', 'user')->withCount('sales')->paginate($perPage);
 
         return response()->json($customers);
     }
@@ -25,20 +25,21 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
+
         $user = auth()->user();
 
-        if ($user?->role != 'admin' || $user?->id != $id) {
-            return response()->json(['errors' => [
-                'message' => 'action unauthorized'
-            ]], 403);
-        }
-
-        $customer = Customer::with(['sales' => 'purchases'], 'user')->withCount(['sales' => 'purchases_count'])->find($id);
+        $customer = Customer::with('sales', 'user')->withCount('sales')->find($id);
 
         if (!$customer) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
+        }
+
+        if ($user->id != $customer->user_id && $user->role != 'admin') {
+            return response()->json(['errors' => [
+                'message' => 'action unauthorized.'
+            ]], 403);
         }
 
         return response()->json($customer);
@@ -50,9 +51,9 @@ class CustomerController extends Controller
     public function update(Request $request, string $id)
     {
         $validation = Validator::make($request->all(), [
-            'phone_number' => 'required|phone',
+            'phone_number' => 'required|string',
             'address_line_1' => 'required',
-            'address_line_2' => 'nullable',
+            'address_line_2' => 'nullable|string',
             'city' => 'required',
             'parish' => 'required',
             'name' => 'required',
@@ -65,18 +66,18 @@ class CustomerController extends Controller
 
         $user = auth()->user();
 
-        if ($user?->role != 'admin' || $user?->id != $id) {
-            return response()->json(['errors' => [
-                'message' => 'action unauthorized'
-            ]], 403);
-        }
-
-        $customer = Customer::with(['sales' => 'purchases'], 'user')->withCount(['sales' => 'purchases_count'])->find($id);
+        $customer = Customer::with('sales', 'user')->withCount('sales')->find($id);
 
         if (!$customer) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
+        }
+
+        if ($user->id != $customer->user_id && $user->role != 'admin') {
+            return response()->json(['errors' => [
+                'message' => 'action unauthorized.'
+            ]], 403);
         }
 
         $user = User::find($customer?->user_id);
@@ -105,7 +106,7 @@ class CustomerController extends Controller
 
         if (!$customer) {
             return response()->json(['errors' => [
-                'message' => 'requested resource not found'
+                'message' => 'requested resource not found.'
             ]], 404);
         }
 

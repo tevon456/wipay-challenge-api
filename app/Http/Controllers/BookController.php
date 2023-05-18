@@ -51,7 +51,7 @@ class BookController extends Controller
         $validation = Validator::make($request->all(), [
             'author_name' => 'required',
             'title' => 'required',
-            'isbn' => 'required|unique:books,isbn',
+            'isbn' => 'required|unique:books,isbn|min:10|max:13',
             'price' => 'required|numeric|min:0',
             'inventory_count' => 'required|integer',
         ]);
@@ -91,7 +91,7 @@ class BookController extends Controller
         $validation = Validator::make($request->all(), [
             'author_name' => 'required',
             'title' => 'required',
-            'isbn' => 'required|unique:books,isbn',
+            'isbn' => 'required|min:10|max:13',
             'price' => 'required|numeric|min:0',
             'inventory_count' => 'required|integer',
         ]);
