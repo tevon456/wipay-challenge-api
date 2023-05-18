@@ -15,7 +15,7 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->query('per_page', 10);
-        $customers = Customer::with(['sales' => 'purchases'], 'user')->withCount(['sales' => 'purchases_count'])->paginate($perPage);
+        $customers = Customer::with('sales', 'user')->withCount('sales')->paginate($perPage);
 
         return response()->json($customers);
     }
