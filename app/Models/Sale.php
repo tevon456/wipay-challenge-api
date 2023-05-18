@@ -23,6 +23,11 @@ class Sale extends Model
         'quantity',
     ];
 
+    protected $casts = [
+        'price_at_purchase' => 'decimal:2',
+        'final_cost' => 'decimal:2',
+    ];
+
     public function book()
     {
         return $this->belongsTo(Book::class);
