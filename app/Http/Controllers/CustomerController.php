@@ -50,9 +50,9 @@ class CustomerController extends Controller
     public function update(Request $request, string $id)
     {
         $validation = Validator::make($request->all(), [
-            'phone_number' => 'required|phone',
+            'phone_number' => 'required|string',
             'address_line_1' => 'required',
-            'address_line_2' => 'nullable',
+            'address_line_2' => 'nullable|string',
             'city' => 'required',
             'parish' => 'required',
             'name' => 'required',
