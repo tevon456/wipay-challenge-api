@@ -19,6 +19,14 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
+        $validation = Validator::make($request->query(), [
+            'per_page' => 'sometimes|required|numeric|min:5',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['errors' => $validation->errors()], 400);
+        }
+
         $user = auth()->user();
         $perPage = $request->query('per_page', 10);
         $books = $user?->role == 'admin' ? Book::with('sales')->withCount('sales')->paginate($perPage) : Book::paginate($perPage);
@@ -53,6 +61,16 @@ class BookController extends Controller
      */
     public function search(Request $request)
     {
+
+        $validation = Validator::make($request->query(), [
+            'per_page' => 'sometimes|required|numeric|min:5',
+            'query' => 'required|string'
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['errors' => $validation->errors()], 400);
+        }
+
         $user = auth()->user();
         $perPage = $request->query('per_page', 10);
         $search = $request->query('query');
