@@ -20,6 +20,9 @@ class Sale extends Model
         'book_id',
         'customer_id',
         'price_at_purchase',
+        'final_cost',
+        'order_id',
+        'status',
         'quantity',
     ];
 
