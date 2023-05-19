@@ -9,7 +9,6 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Faker\Factory as Faker;
 use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request as GRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -25,6 +24,28 @@ class BookController extends Controller
         $books = $user?->role == 'admin' ? Book::with('sales')->withCount('sales')->paginate($perPage) : Book::paginate($perPage);
 
         return response()->json($books);
+    }
+
+    /**
+     * Display a listing of book sales.
+     */
+    public function sales(Request $request)
+    {
+        $validation = Validator::make($request->query(), [
+            'filter' => 'required|array',
+            'filter.*' => 'in:success,pending,failed',
+            'per_page' => 'sometimes|required|numeric|min:5',
+        ]);
+
+        if ($validation->fails()) {
+            return response()->json(['errors' => $validation->errors()], 400);
+        }
+
+        $perPage = $request->query('per_page', 10);
+        $filter = $request->query('filter');
+        $sales = Sale::whereIn('status', $filter)->paginate($perPage);
+
+        return response()->json($sales);
     }
 
     /**
