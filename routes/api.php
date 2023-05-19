@@ -24,9 +24,11 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'book'], function () {
     Route::get('/', [BookController::class, 'index']);
-    Route::get('/search', [BookController::class, 'search']);
-    Route::middleware(['admin'])->post('/', [BookController::class, 'store']);
     Route::get('/{id}', [BookController::class, 'show']);
+    Route::get('/search', [BookController::class, 'search']);
+    Route::middleware(['auth:sanctum'])->post('/purchase', [BookController::class, 'purchase']);
+    Route::get('/purchase/callback', [BookController::class, 'paymentCallback']);
+    Route::middleware(['admin'])->post('/', [BookController::class, 'store']);
     Route::middleware(['admin'])->put('/{id}', [BookController::class, 'update']);
     Route::middleware(['admin'])->delete('/{id}', [BookController::class, 'destroy']);
 });
