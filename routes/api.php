@@ -26,6 +26,7 @@ Route::group(['prefix' => 'book'], function () {
     Route::get('/', [BookController::class, 'index']);
     Route::get('/{id}', [BookController::class, 'show']);
     Route::get('/search', [BookController::class, 'search']);
+    Route::middleware(['admin'])->get('/sales', [BookController::class, 'sales']);
     Route::middleware(['auth:sanctum'])->post('/purchase', [BookController::class, 'purchase']);
     Route::get('/purchase/callback', [BookController::class, 'paymentCallback']);
     Route::middleware(['admin'])->post('/', [BookController::class, 'store']);
